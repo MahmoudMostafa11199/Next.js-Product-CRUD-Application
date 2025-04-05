@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import ProductDetails from '@/components/ProductDetails';
 import ErrorMessage from '@/components/ErrorMessage';
 import Spinner from '@/components/Spinner';
@@ -6,6 +7,10 @@ import { getProductById } from '@/api/products';
 export async function generateMetadata({ params }) {
   const id = params.productId;
   const { data } = await getProductById(id);
+
+  if (!data) {
+    throw new Error(`Product with ID #${id} not found.`);
+  }
 
   return {
     title: `Product Details - #${id}`,
